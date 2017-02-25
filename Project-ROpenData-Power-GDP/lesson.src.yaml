@@ -312,61 +312,64 @@
     由於`"`在R 中是代表字串的開始和結束，所以R 會在顯示字串時，會在`"`之前加註`\`，所以一個`\"`實際上就是一個`"`
 
 - Class : cmd_question
-  Output: 另一個避免`\"`干擾的方式，是使用`cat`這函數。
-    請同學試試看：`cat(readLines(file(gdp_path, encoding = "BIG-5"), n = 20), sep = "\n")`
+  Output: |
+    另一個避免`\"`干擾的方式，是使用`cat`這函數。
+    請同學試試看：`cat(readLines(file(gdp_path, encoding = "BIG-5"), n = 20), sep = "\n")`。
   CorrectAnswer: cat(readLines(file(gdp_path, encoding = "BIG-5"), n = 20), sep = "\n")
   AnswerTests: omnitest('cat(readLines(file(gdp_path, encoding = "BIG-5"), n = 20), sep = "\n")')
 
 - Class : text
-  Output: 上一個問題的答案，其實牽涉到了三層函數：
+  Output: |
+    上一個問題的答案，其實牽涉到了三層函數：
 
 - Class: text
-  Output: 我們先呼叫`file(gdp_path, encoding = "BIG-5")`建立一個connection。
-    connection是R 處理檔案的專業術語，如果比較不熟悉程式設計的同學，就先把
-    connection當成檔案的代理就好。
+  Output: |
+    我們先呼叫`file(gdp_path, encoding = "BIG-5")`建立一個connection。
+    connection是R 處理檔案的專業術語，如果比較不熟悉程式設計的同學，請先將connection當成檔案的代理即可。
 
 - Class : text
-  Output: 接著，我們使用`readLines`處理`file`回傳的物件。這是第二層。
+  Output: |
+    接著，我們使用`readLines`處理`file`回傳的物件。這是第二層。
     這裡我們指定參數`n=20`，代表我們要從connection的最前面讀取前20行。
 
 - Class : text
-  Output: 最後，我們把`readLines`回傳的20個字串交給`cat`作處理。
-    `cat`會直接把字串內容印到R 的console上，而且我們指定每一個
-    字串之間要插入一個斷行。
+  Output: |
+    最後，我們將`readLines`回傳的20個字串交給`cat`作處理。
+    `cat`會直接將字串內容印到R 的console上，而且我們指定每一個字串之間要插入一個斷行。
 
 - Class : cmd_question
-  Output: 這樣一層一層疊上去的寫法，很容易讓程式變的很複雜。
-    Stefan Milton Bache推出了一個R 套件很好地解決了這個問題：
-    `magrittr`。我們在安裝`dplyr`之後，應該已經安裝了這個套件了。
-    因此，請同學直接輸入：`library(magrittr)`
+  Output: |
+    這樣一層一層疊上去的寫法，很容易讓程式變複雜。
+    Stefan Milton Bache推出了一個R 套件很完善地解決了這個問題：`magrittr`。
+    我們在安裝`dplyr`之後，就已經一併安裝這個套件了。
+    因此，請同學直接輸入：`library(magrittr)`。
   CorrectAnswer: library(magrittr)
   AnswerTests: test_search_path("magrittr")
 
 - Class : cmd_question
-  Output: 回顧一下我們剛剛做的事情：
-    把`file(gdp_path, encodoing = "BIG-5")` 得到的物件給
-    `readLines(..., n = 20)` 再把得到的物件給
-    `cat(..., sep = "\n")`。
-    這裡的`...`就代表從上一個函數得到的物件。使用`magrittr`後，
-    我們的寫法就變成：`file(gdp_path, encoding = "BIG-5") %>% readLines(n = 20) %>% cat(sep = "\n")`
-    請同學試試看
+  Output: |
+    回顧一下我們剛剛做的事情：
+    將`file(gdp_path, encodoing = "BIG-5")` 得到的物件給`readLines(..., n = 20)`，再將得到的物件給`cat(..., sep = "\n")`。
+    這裡的`...`就代表從上一個函數得到的物件。
+    使用`magrittr`後，我們的寫法就變成：`file(gdp_path, encoding = "BIG-5") %>% readLines(n = 20) %>% cat(sep = "\n")`，請同學試試看。
   CorrectAnswer: file(gdp_path, encoding = "BIG-5") %>% readLines(n = 20) %>% cat(sep = "\n")
   AnswerTests: omnitest('file(gdp_path, encoding = "BIG-5") %>% readLines(n = 20) %>% cat(sep = "\n")')
 
 - Class : text
-  Output: 在實務上，我們會在`%>%`後斷行，增加程式的可讀性。
+  Output: |
+    在實務上，我們會在`%>%`後斷行，增加程式的可讀性。
 
 - Class : text
-  Output: 回歸正傳，我們第一個要看的，是檔案中的分隔符號是什麼。
-    大家在看過檔案內容之後，應該會同意：分隔符號是`,`
-    另外大家也會注意到這個檔案中，字串的內容的前後會加上`"`。
-    另外每一列的欄位數目也不一致，所以不能簡單用`read.csv`解決。
-    因為資料量不大，我們還是全部用`readLines`讀進來後再用`strsplit`
-    自己切吧！
+  Output: |
+    回歸正傳，在做這一類的操作時，我們首先要做的，就是先確認檔案中的分隔符號。
+    大家在看過檔案內容之後，應該會同意分隔符號是`,`。
+    另外，大家也會注意到這個檔案中，字串的內容的前後會加上`"`。
+    每一列的欄位數目也不一致，所以不能簡單用`read.csv`解決。
+    因為資料量不大，我們還是全部用`readLines`讀進來後再用`strsplit`自己切吧！
 
 - Class : cmd_question
-  Output: 和剛剛的電力資料一樣，請讓我們先用`readLines`把資料全部
-    載入並且存到`gdp`這個變數之中。
+  Output: |
+    和剛剛的電力資料一樣，請讓我們先用`readLines`將資料全部載入並且存到`gdp`這個變數之中。
   CorrectAnswer: gdp <- file(gdp_path, encoding = "BIG-5") %>% readLines()
   AnswerTests: |
     check_val("gdp", local({
@@ -374,8 +377,9 @@
     }))
 
 - Class : cmd_question
-  Output: 接著，我們利用`strsplit`，用`","`當分隔符號，
-    將讀入的gdp資料切成list。請將結果存到`gdp.split`
+  Output: |
+    接著，我們利用`strsplit`，用`","`作為分隔符號，將讀入的gdp資料切成list。
+    請將結果存到`gdp.split`。
   CorrectAnswer: gdp.split <- strsplit(gdp, ",")
   AnswerTests: |
     check_val("gdp.split", local({
@@ -383,35 +387,37 @@
     }))
 
 - Class : cmd_question
-  Output: 仔細一點的話，我們能注意到，年份的資料在切割後，長度都是1 。
-    所以讓我們選取`gdp.split`這個list中，`length`為1 的值。這部分，可以
-    利用`sapply`這個函數來查詢。請同學試試看：
-    `(sapply(gdp.split, length) == 1) %>% which`
-    這裡的`sapply(gdp.split, lenght)`相當於建立一個向量，並且讓第一個值
-    為`length(gdp.split[[1]])`，第二個值為`length(gdp.split[[2]])`，以此類推。
+  Output: |
+    仔細一點觀察的話，我們能注意到，年份的資料在切割後，長度都是1 。
+    所以我們選取`gdp.split`這個list中`length`為1 的值。
+    這部分，可以利用`sapply`這個函數來查詢。
+    請同學試試看：`(sapply(gdp.split, length) == 1) %>% which`。
+    這裡的`sapply(gdp.split, lenght)`相當於建立一個向量，並且讓第一個值為`length(gdp.split[[1]])`，第二個值為`length(gdp.split[[2]])`，以此類推。
   CorrectAnswer: (sapply(gdp.split, length) == 1) %>% which
   AnswerTests: omnitest('(sapply(gdp.split, length) == 1) %>% which')
 
 - Class : cmd_question
-  Output: 我們可以看一下，這些長度為一的行的內容：
-    請同學輸入：`gdp.split[(sapply(gdp.split, length) == 1) %>% which]`
+  Output: |
+    我們可以看一下，這些長度為一的行的內容。
+    請同學輸入：`gdp.split[(sapply(gdp.split, length) == 1) %>% which]`。
   CorrectAnswer: gdp.split[(sapply(gdp.split, length) == 1) %>% which]
   AnswerTests: omnitest('gdp.split[(sapply(gdp.split, length) == 1) %>% which]')
 
 - Class : cmd_question
-  Output: 我們可以看到，只有前7 個index 是真的代表年份。
-    最後幾個index 其實只有指到這個檔案的一些說明。
+  Output: |
+    我們可以看到，只有前7 個index 是真的代表年份。
+    最後幾個index 其實只有指到這個檔案的部分說明。
     所以我們利用`head`這個函數，拿出前7 個index，並存到：`year.index`之中。
-    請同學輸入：`year.index <- (sapply(gdp.split, length) == 1) %>% which %>% head(7)`
+    請同學輸入：`year.index <- (sapply(gdp.split, length) == 1) %>% which %>% head(7)`。
   CorrectAnswer: year.index <- (sapply(gdp.split, length) == 1) %>% which %>% head(7)
   AnswerTests: omnitest('year.index <- (sapply(gdp.split, length) == 1) %>% which %>% head(7)')
 
 - Class : script
-  Output: 接著我們可以利用for 迴圈來切出這份資料。這部分請同學
-    參考路徑在`gdp_df_path`的這個檔案，修改它，讓我們能得到`gdp_df`
-    這個整理乾淨過後的data.frame。
-    你可以利用`browseURL(gdp_df_path)`來打開參考檔案。把檔案
-    的內容複製到gdp_df.R之中，並且再完成之後，輸入：`submit()`
+  Output: |
+    接著我們可以利用for 迴圈來切出這份資料。
+    這部分請同學參考路徑為`gdp_df_path`的檔案並修改它，讓我們能得到`gdp_df`這個整理乾淨過後的data.frame。
+    你可以利用`browseURL(gdp_df_path)`打開參考檔案。
+    將檔案的內容複製到gdp_df.R之中，並且再完成之後，輸入：`submit()`。
   Script: gdp_df.R
   AnswerTests: |
     check_val("gdp.df", local({
@@ -462,29 +468,30 @@
 
 - Class : text
   Output: |
-    接下來我們比對兩者的資料，好計算使用能源的效率。
+    接下來我們比對兩者的資料，好計算各業使用能源的效率。
     但是，這不容易... 比對資料最重要的，是兩者的一致性。
 
 - Class : cmd_question
   Output: |
-    我們先看看gdp.df資料中的行業別。請同學輸入：`unique(gdp.df$name)`
-
+    我們先看看gdp.df資料中的行業別。
+    請同學輸入：`unique(gdp.df$name)`。
+    
 - Class : cmd_question
   Output: |
-    再來看看power.df資料中的行業別。請同學輸入：`unique(power.df$id)`
+    再來看看power.df資料中的行業別。
+    請同學輸入：`unique(power.df$id)`。
 
 - Class : text
   Output: |
-    這裡的資料，一邊是英文+中文，一邊是數字或英文。所以我們先把目標
-    放在英文上就好了。
+    兩邊的資料一邊是英文+中文，另一邊則是數字或英文。
+    所以我們先將目標放在英文上就好了。
 
 - Class : cmd_question
   Output: |
-    請同學輸入：`gdp.df %<>% mutate(id = strsplit(name, ".", fixed = TRUE) %>% sapply("[", 1))`
-    這裡的 %<>% 表示R 會把gdp.df 放到 mutate的第一個參數，然後把輸出結果回存到
-    變數 gdp.df 。這裡的動作是用 "." 來切割 gdp.df$name ，然後將"."之前的結果
-    放到欄位id
-
+    請同學輸入：`gdp.df %<>% mutate(id = strsplit(name, ".", fixed = TRUE) %>% sapply("[", 1))`。
+    這裡的 %<>% 表示R 會將 `gdp.df` 放到 `mutate` 的第一個參數，然後將輸出結果回存到變數 `gdp.df` 中。
+    這裡的動作是用 "." 來切割`gdp.df$name`，然後將"."之前的結果放到欄位`id`中。
+    
 - Class : cmd_question
   Output: |
     我們輸入：`unique(gdp.df$id)`看看整理後的結果。
@@ -495,18 +502,15 @@
 
 - Class : cmd_question
   Output: |
-    請輸入：`gdp.df2 <- filter(gdp.df, nchar(id) == 1)` 來只挑出那些
-    id 為單一文字的資料
-
+    請輸入：`gdp.df2 <- filter(gdp.df, nchar(id) == 1)`來挑出id 為單一文字的資料。
 - Class : cmd_question
   Output: |
-    我們輸入：`unique(gdp.df2$id)`看看整理後的結果，是不是全英文
-
+    我們輸入：`unique(gdp.df2$id)`，確認整理後的結果是否為全英文。
+    
 - Class : script
   Output: |
-    接著我們把目標轉到power.df。請同學利用上述所學，挑選出
-    id欄位為英文的data.frame，將year轉為西元，並將結果存到
-    `power.df2`中。
+    接著我們把目標轉到power.df。
+    請同學利用上述所學，挑選出id欄位為英文的data.frame，將year轉為西元，並將結果存到`power.df2`中。
   Script: power-df2.R
   AnswerTests: |
     check_val("power.df2", local({
@@ -521,31 +525,29 @@
 
 - Class : cmd_question
   Output: |
-    請同學輸入：`distinct(power.df2, id, name)`再檢查一下
-    用電量資料裡的id所代表的意義
-
+    請同學輸入：`distinct(power.df2, id, name)`再檢查一下用電量資料裡的id所代表的意義。
+    
 - Class : cmd_question
   Output: |
-    再請同學輸入：`distinct(gdp.df2, id, name)`再檢查一下
-    國民生產毛額的資料裡的id所代表的意義
+    再請同學輸入：`distinct(gdp.df2, id, name)`再檢查一下國民生產毛額的資料裡的id所代表的意義
 
 - Class : text
-  Output: 同學有沒有注意到，兩者的K，代表的意義不一致？
+  Output: |
+    同學有沒有注意到，兩邊資料中的K，所代表的意義不一致？
 
 - Class : cmd_question
   Output: |
-    這裡我們幫同學簡略地整理一個對應表，放在變數：`translation`，
-    請同學看一看。這是一個多對多的對應關係。有些行業別我們不知道
-    如何對應，等等就先略過。
+    這裡我們幫同學簡略地整理一個對應表，放在變數：`translation`，請同學看一看。
+    這是一個多對多的對應關係。
+    有些行業別我們不知道如何對應，就請先略過。
 
 - Class : cmd_question
   Output: |
-    我們要先把translation展開。利用translation做一個對應表。
-    請同學手動建立一個文字向量：名字就剛好是
-    `c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K")`
-    代表power.df2中的id；值是則是c(1, 2, 3, ...)，代表
-    該值出現在translation中的位置。最後將結果存到變數：
-    `translation.power`
+    我們要先將translation展開。
+    利用translation做一個對應表。
+    請同學手動建立一個文字向量：名字就剛好是`c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K")`
+    代表`power.df2`中的id；值是則是c(1, 2, 3, ...)，代表該值出現在translation中的位置。
+    最後將結果存到變數：`translation.power`中。
   CorrectAnswer: |
     translation.power <- local({
       retval <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 10)
@@ -561,7 +563,7 @@
 
 - Class : cmd_question
   Output: |
-    請用同樣的要領建立變數：`translation.gdp`
+    請用同樣的要領建立變數：`translation.gdp`。
   CorrectAnswer: |
     translation.gdp <- local({
       translation.gdp <- c(1, 2, 3, 4, 4, 5, 6, 7, 6, 7, 8, 8, 9, 9, 10, 9, 9, 9, 9)
@@ -613,7 +615,6 @@
 - Class: text
   Output: |
     恭喜同學完成比對各行業的用電資料與貢獻的國民生產毛額。
-    我們接下來嘗試利用`power.gdp`來建立一些圖表看看資料說說
-    故事。
+    我們接下來嘗試利用`power.gdp`來建立一些圖表，看看資料說說故事。
 
 
